@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stocken API Docs — docs.stocken.io</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0a0c10;
+  --sidebar: #0e1117;
+  --surface: #13171f;
+  --surface2: #1a2030;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8edf5;
+  --muted: #7a8599;
+  --dim: #4a5568;
+  --gold: #f5a623;
+  --gold-dim: rgba(245,166,35,0.12);
+  --blue: #4f8ef7;
+  --blue-dim: rgba(79,142,247,0.1);
+  --green: #34d399;
+  --green-dim: rgba(52,211,153,0.1);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.1);
+  --purple: #a78bfa;
+  --orange: #fb923c;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Figtree', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.sidebar-header {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.sidebar-logo img {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar-logo-text {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.sidebar-subtitle {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.sidebar-nav { padding: 16px 0; flex: 1; }
+
+.nav-group { margin-bottom: 8px; }
+
+.nav-group-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 8px 20px 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-link.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
+
+.nav-method {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+.method-get { background: var(--green-dim); color: var(--green); }
+.method-post { background: var(--blue-dim); color: var(--blue); }
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.api-base {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  word-break: break-all;
+}
+
+.api-base span { color: var(--gold); }
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  background: rgba(10,12,16,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 40;
+}
+
+.topbar-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.topbar-title span { color: var(--gold); }
+
+.version-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(52,211,153,0.2);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  padding: 48px 48px 80px;
+  max-width: 900px;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 72px; }
+
+.section-header {
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* ── INTRO CARDS ── */
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.intro-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.intro-card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.intro-card-value {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.intro-card-value.gold { color: var(--gold); }
+.intro-card-value.green { color: var(--green); }
+
+/* ── API ENDPOINT CARD ── */
+.endpoint {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  transition: border-color 0.2s;
+}
+
+.endpoint:hover { border-color: var(--border2); }
+
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.endpoint-header:hover { background: rgba(255,255,255,0.02); }
+
+.method-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+  min-width: 52px;
+  text-align: center;
+}
+
+.badge-get { background: var(--green-dim); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.badge-post { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(79,142,247,0.2); }
+
+.endpoint-path {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+  flex: 1;
+}
+
+.endpoint-path .base-url { color: var(--dim); }
+.endpoint-path .path-highlight { color: var(--text); }
+.endpoint-path .path-param { color: var(--orange); }
+
+.endpoint-summary {
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: auto;
+  font-style: italic;
+}
+
+.endpoint-body {
+  border-top: 1px solid var(--border);
+  padding: 0;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+
+.tab {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--dim);
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+}
+
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab:hover:not(.active) { color: var(--muted); }
+
+/* ── TAB PANELS ── */
+.tab-panel { display: none; padding: 24px; }
+.tab-panel.active { display: block; }
+
+/* ── PARAMS TABLE ── */
+.params-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.params-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.params-table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: top;
+}
+
+.params-table tr:last-child td { border-bottom: none; }
+
+.param-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--orange);
+  font-weight: 500;
+}
+
+.param-type {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--purple);
+  background: rgba(167,139,250,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.param-required {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  background: var(--red-dim);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.param-optional {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  background: rgba(255,255,255,0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.param-desc { color: var(--muted); font-size: 13px; }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  position: relative;
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+}
+
+.code-lang {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.copy-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover { color: var(--text); border-color: var(--border2); }
+
+pre {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding: 20px;
+  overflow-x: auto;
+  color: #c9d1d9;
+}
+
+.kw { color: #ff7b72; }       /* keyword */
+.str { color: #a5d6ff; }      /* string */
+.num { color: #79c0ff; }      /* number */
+.key { color: #ffa657; }      /* json key */
+.cmt { color: #8b949e; }      /* comment */
+.fn  { color: #d2a8ff; }      /* function */
+.bool { color: #79c0ff; }     /* boolean */
+.url { color: #34d399; }      /* url */
+
+/* ── RESPONSE BLOCK ── */
+.response-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.status-200 { color: var(--green); }
+.status-400 { color: var(--red); }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; }
+.dot-green { background: var(--green); }
+.dot-red { background: var(--red); }
+
+/* ── AUTH SECTION ── */
+.auth-box {
+  background: var(--surface);
+  border: 1px solid rgba(245,166,35,0.2);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.auth-box-title {
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-box p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+/* ── RATE LIMIT BOX ── */
+.info-box {
+  background: var(--blue-dim);
+  border: 1px solid rgba(79,142,247,0.2);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  gap: 12px;
+}
+
+.info-box-icon { color: var(--blue); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── ERROR TABLE ── */
+.error-row td:first-child {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .content { padding: 24px 20px; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 12px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="https://stocken.io" class="sidebar-logo">
+      <img src="./STKN-icon.png" onerror="this.style.display='none'" alt="STKN"/>
+      <span class="sidebar-logo-text">Stocken</span>
+    </a>
+    <div class="sidebar-subtitle">API REFERENCE · V1</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-group-label">Getting Started</div>
+      <a href="#introduction" class="nav-link active">Introduction</a>
+      <a href="#authentication" class="nav-link">Authentication</a>
+      <a href="#errors" class="nav-link">Errors & Codes</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Wallet</div>
+      <a href="#wallet-create" class="nav-link">
+        <span class="nav-method method-post">POST</span>
+        /wallet/create
+      </a>
+      <a href="#wallet-link" class="nav-link">
+        <span class="nav-method method-post">POST</span>
+        /wallet/link
+      </a>
+      <a href="#wallet-balance" class="nav-link">
+        <span class="nav-method method-get">GET</span>
+        /wallet/balance
+      </a>
+      <a href="#wallet-mint" class="nav-link">
+        <span class="nav-method method-post">POST</span>
+        /wallet/mint
+      </a>
+      <a href="#wallet-reward" class="nav-link">
+        <span class="nav-method method-post">POST</span>
+        /wallet/reward
+      </a>
+      <a href="#wallet-deduct" class="nav-link">
+        <span class="nav-method method-post">POST</span>
+        /wallet/deduct
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Token</div>
+      <a href="#stk-rate" class="nav-link">
+        <span class="nav-method method-get">GET</span>
+        /stk/rate
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Partner Ecosystem</div>
+      <a href="#partner-overview" class="nav-link">Overview</a>
+      <a href="#partner-rewards" class="nav-link">Reward Logic</a>
+      <a href="#partner-access" class="nav-link">Getting Access</a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="api-base"><span>Base URL</span><br/>https://api.stocken.io/v1</div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">docs.stocken.io / <span>API Reference</span></div>
+    <div class="version-badge">v1.0.0 · Stable</div>
+  </div>
+
+  <div class="content">
+
+    <!-- INTRODUCTION -->
+    <div class="section" id="introduction">
+      <div class="section-header">
+        <div class="section-tag">Overview</div>
+        <h1 class="section-title">Stocken API</h1>
+        <p class="section-desc">The Stocken API allows you to integrate STKN wallet operations directly into the Stockoo platform and any authorized third-party application. All endpoints are RESTful and return JSON responses.</p>
+      </div>
+
+      <div class="intro-grid">
+        <div class="intro-card">
+          <div class="intro-card-label">Base URL</div>
+          <div class="intro-card-value gold">api.stocken.io/v1</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Protocol</div>
+          <div class="intro-card-value">HTTPS only</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Response Format</div>
+          <div class="intro-card-value">JSON</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Auth Method</div>
+          <div class="intro-card-value">API Key (Header)</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Rate Limit</div>
+          <div class="intro-card-value">1000 req / hour</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Status</div>
+          <div class="intro-card-value green">● Live · Q3 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTHENTICATION -->
+    <div class="section" id="authentication">
+      <div class="section-header">
+        <div class="section-tag">Auth</div>
+        <h2 class="section-title">Authentication</h2>
+        <p class="section-desc">All API requests must include your API key in the request header. Keep your key secret — never expose it in client-side code.</p>
+      </div>
+
+      <div class="auth-box">
+        <div class="auth-box-title">🔑 API Key Header</div>
+        <p>Include your API key as <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">X-STKN-API-Key</code> in every request header.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-lang">HTTP Header</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>X-STKN-API-Key: <span class="str">your_api_key_here</span>
+Content-Type: <span class="str">application/json</span></pre>
+      </div>
+    </div>
+
+    <!-- ERRORS -->
+    <div class="section" id="errors">
+      <div class="section-header">
+        <div class="section-tag">Errors</div>
+        <h2 class="section-title">Error Codes</h2>
+        <p class="section-desc">The API uses standard HTTP status codes. All errors return a JSON body with a <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">code</code> and <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">message</code> field.</p>
+      </div>
+
+      <div class="code-block" style="margin-bottom:20px;">
+        <div class="code-block-header"><span class="code-lang">Error Response</span></div>
+        <pre>{
+  <span class="key">"success"</span>: <span class="bool">false</span>,
+  <span class="key">"code"</span>: <span class="str">"INSUFFICIENT_BALANCE"</span>,
+  <span class="key">"message"</span>: <span class="str">"Wallet does not have enough STKN balance"</span>
+}</pre>
+      </div>
+
+      <table class="params-table">
+        <thead>
+          <tr>
+            <th>HTTP Code</th>
+            <th>Code</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="error-row">
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">200</span></td>
+            <td><span class="param-name">SUCCESS</span></td>
+            <td class="param-desc">Request completed successfully</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">400</span></td>
+            <td><span class="param-name">INVALID_PARAMS</span></td>
+            <td class="param-desc">Missing or invalid request parameters</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">401</span></td>
+            <td><span class="param-name">UNAUTHORIZED</span></td>
+            <td class="param-desc">Invalid or missing API key</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">404</span></td>
+            <td><span class="param-name">WALLET_NOT_FOUND</span></td>
+            <td class="param-desc">Wallet address does not exist</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">409</span></td>
+            <td><span class="param-name">WALLET_EXISTS</span></td>
+            <td class="param-desc">Wallet already exists for this user</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">422</span></td>
+            <td><span class="param-name">INSUFFICIENT_BALANCE</span></td>
+            <td class="param-desc">Wallet does not have enough STKN</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">429</span></td>
+            <td><span class="param-name">RATE_LIMITED</span></td>
+            <td class="param-desc">Too many requests — slow down</td>
+          </tr>
+          <tr class="error-row">
+            <td><span style="color:var(--red);font-family:var(--mono);font-size:12px;">500</span></td>
+            <td><span class="param-name">SERVER_ERROR</span></td>
+            <td class="param-desc">Internal server error — contact support</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── WALLET ENDPOINTS ── -->
+
+    <!-- POST /wallet/create -->
+    <div class="section" id="wallet-create">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Create Wallet</h2>
+        <p class="section-desc">Creates a new STKN wallet for a Stockoo user. Called during user registration. Each user can only have one wallet.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-post">POST</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/create</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wc-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wc-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wc-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wc-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">user_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Unique Stockoo user ID</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">email</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">User's email address</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">name</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-optional">optional</span></td>
+                  <td class="param-desc">User's display name</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wc-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/create</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "user_id": "usr_123456",
+    "email": "user@stockoo.in",
+    "name": "Rahul Sharma"
+  }'</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wc-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 Created</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"wallet"</span>: {
+    <span class="key">"address"</span>: <span class="str">"0x4a3b...f9c2"</span>,
+    <span class="key">"user_id"</span>: <span class="str">"usr_123456"</span>,
+    <span class="key">"balance"</span>: <span class="num">0</span>,
+    <span class="key">"created_at"</span>: <span class="str">"2026-07-01T10:00:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POST /wallet/link -->
+    <div class="section" id="wallet-link">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Link Wallet</h2>
+        <p class="section-desc">Links an existing BNB Chain wallet address to a Stockoo user account. Used when a user already has a MetaMask or external wallet.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-post">POST</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/link</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wl-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wl-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wl-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wl-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">user_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Stockoo user ID to link wallet to</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">address</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">BNB Chain wallet address (0x...)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">signature</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Signed message proving wallet ownership</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wl-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/link</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "user_id": "usr_123456",
+    "address": "0x4a3b9c...f9c2",
+    "signature": "0xabc123..."
+  }'</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wl-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"wallet"</span>: {
+    <span class="key">"address"</span>: <span class="str">"0x4a3b9c...f9c2"</span>,
+    <span class="key">"user_id"</span>: <span class="str">"usr_123456"</span>,
+    <span class="key">"linked"</span>: <span class="bool">true</span>,
+    <span class="key">"linked_at"</span>: <span class="str">"2026-07-01T10:05:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GET /wallet/{address}/balance -->
+    <div class="section" id="wallet-balance">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Get Balance</h2>
+        <p class="section-desc">Returns the current STKN balance for a given wallet address. Used to display balance in the Stockoo app.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-get">GET</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/</span><span class="path-param">{address}</span><span class="path-highlight">/balance</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wb-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wb-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wb-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wb-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">address</span></td>
+                  <td><span class="param-type">path param</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">BNB Chain wallet address (0x...)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wb-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X GET <span class="url">https://api.stocken.io/v1/wallet/0x4a3b...f9c2/balance</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wb-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"address"</span>: <span class="str">"0x4a3b...f9c2"</span>,
+  <span class="key">"balance"</span>: {
+    <span class="key">"stkn"</span>: <span class="num">1250.75</span>,
+    <span class="key">"pending_rewards"</span>: <span class="num">45.00</span>,
+    <span class="key">"inr_value"</span>: <span class="num">8754.23</span>,
+    <span class="key">"updated_at"</span>: <span class="str">"2026-07-01T10:10:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POST /wallet/mint -->
+    <div class="section" id="wallet-mint">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Mint STKN</h2>
+        <p class="section-desc">Mints accumulated STKN rewards to a user's wallet. Called when a user requests withdrawal of their pending rewards to their on-chain wallet.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-post">POST</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/mint</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wm-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wm-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wm-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wm-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">address</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Destination wallet address</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">amount</span></td>
+                  <td><span class="param-type">number</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Amount of STKN to mint (whole tokens)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">user_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Stockoo user ID for verification</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wm-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/mint</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "address": "0x4a3b...f9c2",
+    "amount": 250,
+    "user_id": "usr_123456"
+  }'</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wm-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"tx_hash"</span>: <span class="str">"0xabc123def456..."</span>,
+  <span class="key">"amount"</span>: <span class="num">250</span>,
+  <span class="key">"address"</span>: <span class="str">"0x4a3b...f9c2"</span>,
+  <span class="key">"status"</span>: <span class="str">"confirmed"</span>,
+  <span class="key">"minted_at"</span>: <span class="str">"2026-07-01T10:15:00Z"</span>
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POST /wallet/reward -->
+    <div class="section" id="wallet-reward">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Add Reward</h2>
+        <p class="section-desc">Adds STKN reward directly to a user's wallet balance. Called by the Stockoo rewards engine when a user completes a reward-eligible action (login, prediction, referral, etc.).</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-post">POST</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/reward</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wr-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wr-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wr-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wr-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">user_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Stockoo user ID receiving the reward</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">amount</span></td>
+                  <td><span class="param-type">number</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">STKN amount to add as reward</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">reason</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Reward type: <code style="font-family:var(--mono);color:var(--orange);font-size:11px;">daily_login | streak | prediction | referral | community | top_performer</code></td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">reference_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-optional">optional</span></td>
+                  <td class="param-desc">Reference ID for the triggering event (e.g. prediction ID)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wr-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/reward</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "user_id": "usr_123456",
+    "amount": 5,
+    "reason": "daily_login",
+    "reference_id": "login_20260701"
+  }'</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wr-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"reward"</span>: {
+    <span class="key">"user_id"</span>: <span class="str">"usr_123456"</span>,
+    <span class="key">"amount"</span>: <span class="num">5</span>,
+    <span class="key">"reason"</span>: <span class="str">"daily_login"</span>,
+    <span class="key">"new_balance"</span>: <span class="num">1255.75</span>,
+    <span class="key">"rewarded_at"</span>: <span class="str">"2026-07-01T10:20:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POST /wallet/deduct -->
+    <div class="section" id="wallet-deduct">
+      <div class="section-header">
+        <div class="section-tag">Wallet</div>
+        <h2 class="section-title">Deduct STKN</h2>
+        <p class="section-desc">Deducts STKN from a user's wallet for subscription payment contribution. Maximum 30% of subscription value can be covered by STKN — remaining must be paid in fiat.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-post">POST</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/wallet/deduct</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'wd-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'wd-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'wd-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="wd-params">
+            <table class="params-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">user_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Stockoo user ID</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">amount</span></td>
+                  <td><span class="param-type">number</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">STKN amount to deduct (must not exceed 30% of subscription value)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">subscription_id</span></td>
+                  <td><span class="param-type">string</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Subscription plan ID being purchased</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">subscription_value_inr</span></td>
+                  <td><span class="param-type">number</span></td>
+                  <td><span class="param-required">required</span></td>
+                  <td class="param-desc">Total subscription cost in INR for validation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-panel" id="wd-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/deduct</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "user_id": "usr_123456",
+    "amount": 150,
+    "subscription_id": "pro_monthly",
+    "subscription_value_inr": 299
+  }'</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="wd-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"deduction"</span>: {
+    <span class="key">"user_id"</span>: <span class="str">"usr_123456"</span>,
+    <span class="key">"stkn_deducted"</span>: <span class="num">150</span>,
+    <span class="key">"inr_covered"</span>: <span class="num">89.70</span>,
+    <span class="key">"remaining_inr"</span>: <span class="num">209.30</span>,
+    <span class="key">"new_balance"</span>: <span class="num">1100.75</span>,
+    <span class="key">"subscription_id"</span>: <span class="str">"pro_monthly"</span>,
+    <span class="key">"deducted_at"</span>: <span class="str">"2026-07-01T10:25:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GET /stk/rate -->
+    <div class="section" id="stk-rate">
+      <div class="section-header">
+        <div class="section-tag">Token</div>
+        <h2 class="section-title">Get STKN Rate</h2>
+        <p class="section-desc">Returns the current STKN to INR exchange rate. Used at checkout to calculate how much INR value a user's STKN covers toward their subscription.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method-badge badge-get">GET</span>
+          <span class="endpoint-path">
+            <span class="base-url">https://api.stocken.io/v1</span><span class="path-highlight">/stk/rate</span>
+          </span>
+        </div>
+        <div class="endpoint-body">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'sr-params')">Parameters</div>
+            <div class="tab" onclick="switchTab(this, 'sr-request')">Request</div>
+            <div class="tab" onclick="switchTab(this, 'sr-response')">Response</div>
+          </div>
+          <div class="tab-panel active" id="sr-params">
+            <div class="info-box">
+              <span class="info-box-icon">ℹ</span>
+              <span>No parameters required. Rate is updated every 5 minutes from the live BNB Chain market price.</span>
+            </div>
+          </div>
+          <div class="tab-panel" id="sr-request">
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">cURL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">curl</span> -X GET <span class="url">https://api.stocken.io/v1/stk/rate</span> \
+  -H <span class="str">"X-STKN-API-Key: your_api_key"</span></pre>
+            </div>
+          </div>
+          <div class="tab-panel" id="sr-response">
+            <div class="response-status status-200"><span class="status-dot dot-green"></span>200 OK</div>
+            <div class="code-block">
+              <div class="code-block-header"><span class="code-lang">JSON</span></div>
+              <pre>{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"rate"</span>: {
+    <span class="key">"stkn_to_inr"</span>: <span class="num">0.598</span>,
+    <span class="key">"stkn_to_usd"</span>: <span class="num">0.0072</span>,
+    <span class="key">"source"</span>: <span class="str">"PancakeSwap"</span>,
+    <span class="key">"updated_at"</span>: <span class="str">"2026-07-01T10:25:00Z"</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- PARTNER ECOSYSTEM -->
+  <div class="content" style="max-width:900px; padding-top: 0;">
+
+    <div class="section" id="partner-overview">
+      <div class="section-header">
+        <div class="section-tag">Partner Ecosystem</div>
+        <h2 class="section-title">Open Ecosystem</h2>
+        <p class="section-desc">STKN is not exclusive to Stockoo. Any authorized third-party application can integrate Stocken into their platform — enabling their users to earn and spend STKN natively. Stockoo is simply the first app in the ecosystem.</p>
+      </div>
+
+      <div class="auth-box">
+        <div class="auth-box-title">🌐 How it works</div>
+        <p>Partner apps use the same Stocken API endpoints (<code style="font-family:var(--mono);color:var(--orange);font-size:12px;">/wallet/reward</code>, <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">/wallet/deduct</code>, <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">/wallet/balance</code>) with their own API key. All transactions settle on the same BNB Chain smart contract — fully transparent and on-chain.</p>
+      </div>
+
+      <div class="intro-grid">
+        <div class="intro-card">
+          <div class="intro-card-label">Who can integrate</div>
+          <div class="intro-card-value" style="font-size:13px;">Any authorized app via Partner Agreement</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Reward Logic</div>
+          <div class="intro-card-value" style="font-size:13px;">Defined by partner — not Stocken</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Settlement</div>
+          <div class="intro-card-value gold">BNB Chain · On-chain</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">API Key</div>
+          <div class="intro-card-value" style="font-size:13px;">Unique per partner</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Rate Limits</div>
+          <div class="intro-card-value" style="font-size:13px;">Configurable per partner</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-label">Availability</div>
+          <div class="intro-card-value green">● Phase 4 · Q1 2027</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="partner-rewards">
+      <div class="section-header">
+        <div class="section-tag">Partner Ecosystem</div>
+        <h2 class="section-title">Reward Logic</h2>
+        <p class="section-desc">Partner apps have full autonomy over their reward structure. Stocken provides the infrastructure — partners decide the rules.</p>
+      </div>
+
+      <div class="info-box">
+        <span class="info-box-icon">ℹ</span>
+        <span>Stocken does not govern, approve, or restrict how partner apps define their reward amounts or triggers. Each partner is fully responsible for their own reward policy.</span>
+      </div>
+
+      <table class="params-table">
+        <thead><tr><th>Responsibility</th><th>Stocken</th><th>Partner App</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="param-desc">STKN smart contract</td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Manages</span></td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">API infrastructure</td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Provides</span></td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">Reward amounts</td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Decides</span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">Reward triggers</td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Decides</span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">Payment terms</td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Decides</span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">On-chain settlement</td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Handles</span></td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+          </tr>
+          <tr>
+            <td class="param-desc">User wallet management</td>
+            <td><span style="color:var(--green);font-family:var(--mono);font-size:12px;">✓ Handles</span></td>
+            <td><span style="color:var(--dim);font-family:var(--mono);font-size:12px;">— </span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px;">
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-lang">Partner rewarding a user — cURL</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cmt"># Partner app rewards their user with STKN</span>
+<span class="cmt"># Amount and reason are fully decided by the partner</span>
+<span class="fn">curl</span> -X POST <span class="url">https://api.stocken.io/v1/wallet/reward</span> \
+  -H <span class="str">"X-STKN-API-Key: partner_app_api_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "user_id": "partner_user_789",
+    "amount": 50,
+    "reason": "trade_completed",
+    "reference_id": "trade_abc123"
+  }'</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="partner-access">
+      <div class="section-header">
+        <div class="section-tag">Partner Ecosystem</div>
+        <h2 class="section-title">Getting Access</h2>
+        <p class="section-desc">Partner API access is available from Phase 4 (Q1 2027). To apply for early access or register interest, contact the Stocken team.</p>
+      </div>
+
+      <div class="auth-box">
+        <div class="auth-box-title">📩 Apply for Partner Access</div>
+        <p>Email <code style="font-family:var(--mono);color:var(--orange);font-size:12px;">contact@stocken.io</code> with your app name, use case, and estimated monthly active users. The Stocken team will review and issue a Partner Agreement and API key.</p>
+      </div>
+
+      <table class="params-table">
+        <thead><tr><th>Step</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="param-name">1</span></td><td class="param-desc">Email contact@stocken.io with your app details</td></tr>
+          <tr><td><span class="param-name">2</span></td><td class="param-desc">Sign the Stocken Partner Agreement</td></tr>
+          <tr><td><span class="param-name">3</span></td><td class="param-desc">Receive your unique API key and sandbox access</td></tr>
+          <tr><td><span class="param-name">4</span></td><td class="param-desc">Integrate and test on BNB Testnet</td></tr>
+          <tr><td><span class="param-name">5</span></td><td class="param-desc">Go live on BNB Mainnet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /partner content -->
+</div><!-- /main -->
+
+<script>
+function switchTab(tabEl, panelId) {
+  const endpointBody = tabEl.closest('.endpoint-body');
+  endpointBody.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  endpointBody.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-link');
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
