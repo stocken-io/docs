@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Stocken API Docs — docs.stocken.io</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -533,11 +532,70 @@ pre {
 ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
 
 @media (max-width: 768px) {
-  .sidebar { display: none; }
+  .sidebar { 
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    overflow-y: auto;
+  }
+  .sidebar.open { display: flex; flex-direction: column; }
   .main { margin-left: 0; }
-  .content { padding: 24px 20px; }
+  .content { padding: 24px 16px; }
   .intro-grid { grid-template-columns: 1fr; }
-  .topbar { padding: 12px 20px; }
+  .topbar { padding: 12px 16px; }
+  .topbar-title { font-size: 11px; }
+
+  /* Hamburger button */
+  .hamburger {
+    display: flex !important;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--muted);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* Code blocks */
+  pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 12px !important;
+  }
+  .code-block { overflow-x: auto; }
+
+  /* Endpoint cards */
+  .endpoint-header { flex-wrap: wrap; gap: 8px; }
+  .endpoint-path { font-size: 13px; word-break: break-all; }
+
+  /* Close button for sidebar */
+  .sidebar-close {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 16px 20px 0;
+  }
+  .sidebar-close button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 769px) {
+  .hamburger { display: none !important; }
+  .sidebar-close { display: none !important; }
 }
 </style>
 </head>
@@ -545,6 +603,9 @@ pre {
 
 <!-- ── SIDEBAR ── -->
 <aside class="sidebar">
+  <div class="sidebar-close">
+    <button onclick="document.querySelector('.sidebar').classList.remove('open')" aria-label="Close menu">✕</button>
+  </div>
   <div class="sidebar-header">
     <a href="https://stocken.io" class="sidebar-logo">
       <img src="./STKN-icon.png" onerror="this.style.display='none'" alt="STKN"/>
@@ -613,7 +674,12 @@ pre {
 <!-- ── MAIN ── -->
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title">docs.stocken.io / <span>API Reference</span></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title">docs.stocken.io / <span>API Reference</span></div>
+    </div>
     <div class="version-badge">v1.0.0 · Stable</div>
   </div>
 
@@ -1449,6 +1515,13 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 
 sections.forEach(s => io.observe(s));
+
+// Close sidebar when nav link clicked on mobile
+document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('open');
+  });
+});
 </script>
 </body>
 </html>
