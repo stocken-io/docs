@@ -40,6 +40,7 @@ body {
   display: flex;
   min-height: 100vh;
   font-size: 15px;
+  overflow-x: hidden;
   line-height: 1.6;
 }
 
@@ -540,11 +541,20 @@ pre {
     overflow-y: auto;
   }
   .sidebar.open { display: flex; flex-direction: column; }
-  .main { margin-left: 0; }
-  .content { padding: 24px 16px; }
+  .main { margin-left: 0; overflow-x: hidden; }
+  .content {
+    padding: 24px 16px;
+    max-width: 100% !important;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+  }
   .intro-grid { grid-template-columns: 1fr; }
   .topbar { padding: 12px 16px; }
   .topbar-title { font-size: 11px; }
+
+  /* Prevent overflow on all elements */
+  .content * { max-width: 100%; box-sizing: border-box; }
 
   /* Hamburger button */
   .hamburger {
@@ -565,13 +575,18 @@ pre {
     transition: all 0.3s;
   }
 
-  /* Code blocks */
+  /* Code blocks - scroll horizontally within box */
   pre {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 12px !important;
+    max-width: calc(100vw - 32px);
+    white-space: pre;
   }
-  .code-block { overflow-x: auto; }
+  .code-block {
+    overflow-x: auto;
+    max-width: calc(100vw - 32px);
+  }
 
   /* Endpoint cards */
   .endpoint-header { flex-wrap: wrap; gap: 8px; }
@@ -1340,7 +1355,7 @@ Content-Type: <span class="str">application/json</span></pre>
   </div><!-- /content -->
 
   <!-- PARTNER ECOSYSTEM -->
-  <div class="content" style="max-width:900px; padding-top: 0;">
+  <div class="content" style="max-width:900px; padding-top: 0; box-sizing: border-box; width: 100%;">
 
     <div class="section" id="partner-overview">
       <div class="section-header">
